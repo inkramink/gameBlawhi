@@ -1,8 +1,9 @@
 import pygame
 import os
 import sys
-JUMP_POWER = 5
-GRAVITY = 0.35
+JUMP_POWER = 12
+GRAVITY = 0.65
+ANIMATION_SPEED = 15
 
 
 def load_image(name, colorkey=None):
@@ -23,11 +24,14 @@ def load_image(name, colorkey=None):
 
 
 class Blawhi(pygame.sprite.Sprite):
-    image = load_image("blawhi1.png", colorkey=-1)
+    images = [pygame.transform.scale2x(load_image(f"blawhi{i}.jpg", colorkey=-1)) for i in range(1, 9)]
 
     def __init__(self, *group, pos_x=0, pos_y=0):
         super().__init__(*group)
-        self.image = Blawhi.image
+        self.image = Blawhi.images[0]
+        self.image_i = 0
+        self.animation_counter = 0
+        self.left = True
         self.rect = self.image.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
@@ -37,22 +41,37 @@ class Blawhi(pygame.sprite.Sprite):
         self.onGround = False  # Нахождение на земле
 
     def update(self, left, right, up):
+        if left or right:  # смена кадра при ходьбе
+            self.animation_counter += 1
+            if self.animation_counter >= ANIMATION_SPEED:
+                self.image_i += 1
+                if self.image_i >= len(Blawhi.images):
+                    self.image_i = 0
         if left:
             self.xvel = -self.speed
+            self.left = True  # отражение спрайта
         if right:
             self.xvel = self.speed
+            self.left = False  # отражение спрайта
         if not (left or right):
             self.xvel = 0
+            self.image_i = 0
         if up:
             if self.onGround:
                 self.yvel = -JUMP_POWER
                 self.onGround = False
+                self.image_i = 0
         if not self.onGround:
             self.yvel += GRAVITY
+            self.image_i = len(Blawhi.images) // 2
 
         self.onGround = False
         self.rect.x += self.xvel
         self.rect.y += self.yvel
+        if not(self.left):
+            self.image = Blawhi.images[self.image_i]
+        else:
+            self.image = pygame.transform.flip(Blawhi.images[self.image_i], 1, 0)
         self.collide()
 
     def collide(self):

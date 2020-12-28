@@ -15,6 +15,7 @@ if __name__ == '__main__':
     running = True
     left, right, up = False, False, False
     clock = pygame.time.Clock()
+    
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -31,11 +32,13 @@ if __name__ == '__main__':
                 up = True
             if event.type == pygame.KEYUP and event.key == pygame.K_UP:
                 up = False
+
         screen.fill((255, 255, 255))
         blawhi_player.update(left, right, up)
         screen.blit(blawhi_player.image, blawhi_player.rect)
         all_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
+        
     pygame.quit()
 
