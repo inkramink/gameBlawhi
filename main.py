@@ -12,6 +12,11 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
     from class_blawhi import Blawhi
     blawhi_player = Blawhi(all_sprites)
+    # from class_walls import Border
+    # Border(0, 0, width, 0)
+    # Border(0, height, width, height)
+    # Border(0, 0, 0, height)
+    # Border(width, 0, width, height)
     running = True
     left, right, up = False, False, False
     clock = pygame.time.Clock()

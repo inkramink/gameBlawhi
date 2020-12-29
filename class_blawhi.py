@@ -41,6 +41,11 @@ class Blawhi(pygame.sprite.Sprite):
         self.onGround = False  # Нахождение на земле
 
     def update(self, left, right, up):
+        # from class_walls import horizontal_borders, vertical_borders
+        # if pygame.sprite.spritecollideany(self, horizontal_borders) or \
+        #         pygame.sprite.spritecollideany(self, vertical_borders):
+        #     print(0)
+        #     self.collide()
         if left or right:  # смена кадра при ходьбе
             self.animation_counter += 1
             if self.animation_counter >= ANIMATION_SPEED:
@@ -80,6 +85,7 @@ class Blawhi(pygame.sprite.Sprite):
         if self.rect.left <= 0:
             self.rect.left = 0
         if self.rect.bottom >= 600:
+            self.rect.bottom = 600
             self.yvel = 0
             self.onGround = True
 
