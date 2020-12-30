@@ -40,12 +40,7 @@ class Blawhi(pygame.sprite.Sprite):
         self.speed = 5
         self.onGround = False  # Нахождение на земле
 
-    def update(self, left, right, up):
-        # from class_walls import horizontal_borders, vertical_borders
-        # if pygame.sprite.spritecollideany(self, horizontal_borders) or \
-        #         pygame.sprite.spritecollideany(self, vertical_borders):
-        #     print(0)
-        #     self.collide()
+    def update(self, left, right, up, platforms):
         if left or right:  # смена кадра при ходьбе
             self.animation_counter += 1
             if self.animation_counter >= ANIMATION_SPEED:
@@ -72,19 +67,33 @@ class Blawhi(pygame.sprite.Sprite):
 
         self.onGround = False
         self.rect.x += self.xvel
+        self.collide(self.xvel, 0, platforms)
         self.rect.y += self.yvel
+        self.collide(0, self.yvel, platforms)
         if not(self.left):
             self.image = Blawhi.images[self.image_i]
         else:
             self.image = pygame.transform.flip(Blawhi.images[self.image_i], 1, 0)
-        self.collide()
 
-    def collide(self):
+    def collide(self, xvel, yvel, platforms):
+        for platform in platforms:
+            if pygame.sprite.collide_rect(self, platform):
+                if xvel > 0:
+                    self.rect.right = platform.rect.left
+                if xvel < 0:
+                    self.rect.left = platform.rect.right
+                if yvel > 0:
+                    self.rect.bottom = platform.rect.top
+                    self.onGround = True
+                    self.yvel = 0
+                if yvel < 0:
+                    self.rect.top = platform.rect.bottom
+                    self.yvel = 0
         if self.rect.right >= 800:
             self.rect.right = 800
         if self.rect.left <= 0:
             self.rect.left = 0
-        if self.rect.bottom >= 600:
+        if self.rect.bottom >= 600 and self.yvel > 0:
             self.rect.bottom = 600
             self.yvel = 0
             self.onGround = True

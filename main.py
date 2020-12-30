@@ -3,6 +3,7 @@ import sys
 import pygame
 
 FPS = 60
+platform_coords = [(50, 580), (150, 500)]
 
 if __name__ == '__main__':
     pygame.init()
@@ -12,11 +13,10 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
     from class_blawhi import Blawhi
     blawhi_player = Blawhi(all_sprites)
-    # from class_walls import Border
-    # Border(0, 0, width, 0)
-    # Border(0, height, width, height)
-    # Border(0, 0, 0, height)
-    # Border(width, 0, width, height)
+    platforms = pygame.sprite.Group()
+    from class_platform import Platform
+    for i in platform_coords:
+        my_platform = Platform(platforms, location=i)
     running = True
     left, right, up = False, False, False
     clock = pygame.time.Clock()
@@ -39,9 +39,12 @@ if __name__ == '__main__':
                 up = False
 
         screen.fill((255, 255, 255))
-        blawhi_player.update(left, right, up)
+        blawhi_player.update(left, right, up, platforms)
+        for my_platform in platforms:
+            screen.blit(my_platform.image, my_platform.rect)
         screen.blit(blawhi_player.image, blawhi_player.rect)
         all_sprites.draw(screen)
+        platforms.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
         
