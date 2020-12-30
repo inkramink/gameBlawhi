@@ -1,6 +1,7 @@
 import pygame
 import os
 import sys
+
 JUMP_POWER = 12
 GRAVITY = 0.65
 ANIMATION_SPEED = 15
@@ -41,6 +42,12 @@ class Blawhi(pygame.sprite.Sprite):
         self.onGround = False  # Нахождение на земле
 
     def update(self, left, right, up, platforms):
+        from class_buttonsForBlawhi import Buttons, RGButtons
+        from main import RGB, RGB_coords
+        for i in range(3):
+            if pygame.sprite.collide_mask(self, Buttons(RGB, num=i, location=RGB_coords[i])) and \
+                    RGButtons[i] == 0:
+                RGButtons[i] = 1
         if left or right:  # смена кадра при ходьбе
             self.animation_counter += 1
             if self.animation_counter >= ANIMATION_SPEED:
@@ -71,7 +78,7 @@ class Blawhi(pygame.sprite.Sprite):
         self.rect.y += self.yvel
         self.collide(0, self.yvel, platforms)
 
-        if not(self.left):
+        if not (self.left):
             self.image = Blawhi.images[self.image_i]
         else:
             self.image = pygame.transform.flip(Blawhi.images[self.image_i], 1, 0)
@@ -98,4 +105,3 @@ class Blawhi(pygame.sprite.Sprite):
             self.rect.bottom = 600
             self.yvel = 0
             self.onGround = True
-
