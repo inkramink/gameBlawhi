@@ -66,16 +66,15 @@ class Blawhi(pygame.sprite.Sprite):
             # self.image_i = len(Blawhi.images) // 2
 
         self.onGround = False
+        self.rect.x += self.xvel
         self.collide(self.xvel, 0, platforms)
         self.rect.y += self.yvel
         self.collide(0, self.yvel, platforms)
-        self.rect.x += self.xvel
 
         if not(self.left):
             self.image = Blawhi.images[self.image_i]
         else:
             self.image = pygame.transform.flip(Blawhi.images[self.image_i], 1, 0)
-        
 
     def collide(self, xvel, yvel, platforms):
         for platform in platforms:

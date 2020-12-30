@@ -3,7 +3,7 @@ import sys
 import pygame
 
 FPS = 60
-platform_coords = [(50, 580), (150, 500)]
+platform_coords = [(50, 580), (150, 500), (0, 595), (50, 595)]
 
 if __name__ == '__main__':
     pygame.init()
