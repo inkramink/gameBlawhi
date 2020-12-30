@@ -12,6 +12,8 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
     from class_blawhi import Blawhi
     blawhi_player = Blawhi(all_sprites)
+    from class_platforms import Platform
+    Platform(300, 600)
     # from class_walls import Border
     # Border(0, 0, width, 0)
     # Border(0, height, width, height)
@@ -20,7 +22,7 @@ if __name__ == '__main__':
     running = True
     left, right, up = False, False, False
     clock = pygame.time.Clock()
-    
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -44,6 +46,5 @@ if __name__ == '__main__':
         all_sprites.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
-        
-    pygame.quit()
 
+    pygame.quit()

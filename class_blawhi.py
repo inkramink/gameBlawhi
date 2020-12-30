@@ -33,6 +33,7 @@ class Blawhi(pygame.sprite.Sprite):
         self.animation_counter = 0
         self.left = True
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = pos_x
         self.rect.y = pos_y
         self.yvel = 0  # Скорость по оси y
@@ -41,6 +42,10 @@ class Blawhi(pygame.sprite.Sprite):
         self.onGround = False  # Нахождение на земле
 
     def update(self, left, right, up):
+        from class_platforms import Platform, platforms
+        if pygame.sprite.collide_mask(self, platforms):
+            print(0)
+            self.collide()
         # from class_walls import horizontal_borders, vertical_borders
         # if pygame.sprite.spritecollideany(self, horizontal_borders) or \
         #         pygame.sprite.spritecollideany(self, vertical_borders):
