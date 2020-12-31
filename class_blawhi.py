@@ -25,7 +25,7 @@ def load_image(name, colorkey=None):
 
 
 class Blawhi(pygame.sprite.Sprite):
-    images = [pygame.transform.scale2x(load_image(f"blawhi{i}.jpg", colorkey=-1)) for i in range(1, 9)]
+    images = [pygame.transform.scale2x(load_image(f"blawhi{i}.png", colorkey=-1)) for i in range(1, 10)]
 
     def __init__(self, *group, pos_x=0, pos_y=0):
         super().__init__(*group)

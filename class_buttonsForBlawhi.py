@@ -10,8 +10,8 @@ RGButtons = [0, 0, 0]
 
 
 class FlagButtons(pygame.sprite.Sprite):
-    images = [load_image('button.jpg'), load_image('buttonRed.jpg'),
-              load_image('buttonGreen.jpg'), load_image('buttonBlue.jpg')]
+    images = [load_image('button.png', colorkey=-1), load_image('buttonRed.png', colorkey=-1),
+              load_image('buttonGreen.png', colorkey=-1), load_image('buttonBlue.png', colorkey=-1)]
 
     def __init__(self, num=0):
         super().__init__(all_sprites)
@@ -26,8 +26,8 @@ class FlagButtons(pygame.sprite.Sprite):
 
 
 class Buttons(pygame.sprite.Sprite):
-    images = [load_image('buttonRed.jpg'), load_image('buttonGreen.jpg'),
-              load_image('buttonBlue.jpg')]
+    images = [load_image('buttonRed.png', colorkey=-1), load_image('buttonGreen.png', colorkey=-1),
+              load_image('buttonBlue.png', colorkey=-1)]
 
     def __init__(self, *group, num=0, location=(0, 0)):
         super().__init__(*group)
