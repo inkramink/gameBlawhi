@@ -40,14 +40,17 @@ class Blawhi(pygame.sprite.Sprite):
         self.xvel = 0  # Скорость по оси x
         self.speed = 5
         self.onGround = False  # Нахождение на земле
+        self.all_buttons_collected = False
 
-    def update(self, left, right, up, platforms):
+    def update(self, left, right, up, platforms, RGB, RGB_coords):
         from class_buttonsForBlawhi import Buttons, RGButtons
-        from main import RGB, RGB_coords
         for i in range(3):
             if pygame.sprite.collide_mask(self, Buttons(RGB, num=i, location=RGB_coords[i])) and \
                     RGButtons[i] == 0:
                 RGButtons[i] = 1
+        if all(RGButtons):
+            self.all_buttons_collected = True  # выигрыщ на уровне
+            
         if left or right:  # смена кадра при ходьбе
             self.animation_counter += 1
             if self.animation_counter >= ANIMATION_SPEED:
