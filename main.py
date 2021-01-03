@@ -51,7 +51,7 @@ def level(screen, platform_coords, RGB_coords, RGB):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                return False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 left = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
@@ -82,15 +82,32 @@ def level(screen, platform_coords, RGB_coords, RGB):
         RGB.draw(screen)
         if blawhi_player.all_buttons_collected:
             running = False
-
         pygame.display.flip()
         clock.tick(FPS)
 
+    return True
 
-def win_bild(i):
-    # показывается картинка с поздравлением и позможностью
-    # перехода либо в меню либо на след уровень
-    pass
+
+def win_bild(screen, i):
+    text1 = 'Уровень ' + str(i + 1) + ' пройден'
+    text2 = 'Нажмите ENTER, чтобы продолжить'
+    ft1_font = pygame.font.SysFont('serif', 60)
+    ft1_surf = ft1_font.render(text1, True, (70, 70, 70))
+    ft2_font = pygame.font.SysFont('serif', 40)
+    ft2_surf = ft2_font.render(text2, True, (70, 70, 70))
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                running = False
+
+        screen.blit(ft1_surf, [screen.get_width() / 2 - ft1_surf.get_width() / 2, 100])
+        screen.blit(ft2_surf, [screen.get_width() / 2 - ft2_surf.get_width() / 2, 170])
+        pygame.display.flip()
+
+    return True
 
 
 def main():
@@ -102,8 +119,10 @@ def main():
 
     for i in range(LEVELS):
         RGB = pygame.sprite.Group()
-        level(screen, platform_coords[i], RGB_coords[i], RGB)
-        win_bild(i)
+        if not level(screen, platform_coords[i], RGB_coords[i], RGB):
+            break
+        if not win_bild(screen, i):
+            break
 
     pygame.quit()
 
