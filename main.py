@@ -77,6 +77,7 @@ def level(screen, platform_coords, RGB_coords, RGB):
         platforms.draw(screen)
 
         RGB = pygame.sprite.Group()
+        flagRGB.empty()
         for i in range(3):
             FlagButtons(i)
             if RGButtons[i] == 0:
