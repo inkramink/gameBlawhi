@@ -27,7 +27,10 @@ def button(platform_coords, platform):
 
 
 def level(screen, platform_coords, RGB_coords, RGB):
-    screen.fill((255, 255, 255))
+    from class_blawhi import load_image
+    bg_image = load_image('background.png')
+    background = pygame.Surface(screen.get_size())
+    background.blit(bg_image, (0, 0))
     all_sprites = pygame.sprite.Group()
     from class_buttonsForBlawhi import FlagButtons, flagRGB, Buttons, RGButtons
 
@@ -65,7 +68,7 @@ def level(screen, platform_coords, RGB_coords, RGB):
             if event.type == pygame.KEYUP and event.key == pygame.K_UP:
                 up = False
 
-        screen.fill((255, 255, 255))
+        screen.blit(background, (0, 0))
         blawhi_player.update(left, right, up, platforms, RGB, RGB_coords)
         for my_platform in platforms:
             screen.blit(my_platform.image, my_platform.rect)
