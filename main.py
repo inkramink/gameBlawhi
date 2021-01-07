@@ -8,6 +8,7 @@ size = 800, 600
 def levels_init(LEVELS):
     platform_hor_coords = [[(550, 500)], [(550, 500)]]
     platform_ver_coords = [[(400, 500)], [(400, 500)]]
+    platform_cir_coords = [[(300, 300)]]
     platform_coords = [
         [(50, 580), (150, 500), (280, 426), (440, 430), (330, 380), (160, 300)],
         [(250, 540), (400, 470), (560, 360), (370, 300), (680, 390)]
@@ -23,7 +24,8 @@ def levels_init(LEVELS):
         for platform in botom_platforms[i]:
             platform_coords[i].append(platform)
 
-    return platform_coords[:LEVELS], RGB_coords[:LEVELS], platform_hor_coords, platform_ver_coords, level_borders
+    return platform_coords[:LEVELS], RGB_coords[:LEVELS], platform_hor_coords, \
+           platform_ver_coords, level_borders, platform_cir_coords
 
 
 def button(platform_coords, platform):
@@ -31,7 +33,8 @@ def button(platform_coords, platform):
     return platform_coords[platform][0] + 20, platform_coords[platform][1] - 20
 
 
-def level(screen, platform_coords, RGB_coords, platform_hor_coords, platform_ver_coords, level_borders):
+def level(screen, platform_coords, RGB_coords, platform_hor_coords,
+          platform_ver_coords, level_borders, platform_cir_coords):
     from class_blawhi import load_image
     bg_image = load_image('background.png')
     background = pygame.Surface(screen.get_size())
@@ -51,7 +54,8 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords, platform_ver
     platforms = pygame.sprite.Group()
     platforms_hor = pygame.sprite.Group()
     platforms_ver = pygame.sprite.Group()
-    from class_platform import Platform, PlatformHor, PlatformVer
+    platforms_cir = pygame.sprite.Group()
+    from class_platform import Platform, PlatformHor, PlatformVer, PlatformKr
 
     for i in platform_coords:
         Platform(platforms, location=i)
@@ -59,10 +63,14 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords, platform_ver
         PlatformHor(platforms_hor, location=i)
     for i in platform_ver_coords:
         PlatformVer(platforms_ver, location=i)
-    
+    for i in platform_cir_coords:
+        print(i)
+        PlatformKr(platforms_cir, location=i)
+
     all_sprites.add(*platforms.sprites())
     all_sprites.add(*platforms_hor.sprites())
     all_sprites.add(*platforms_ver.sprites())
+    all_sprites.add(*platforms_cir.sprites())
     all_sprites.add(*RGB.sprites())
 
     running = True
@@ -92,9 +100,11 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords, platform_ver
                 up = False
 
         screen.blit(background, (0, 0))
-        blawhi_player.update(left, right, up, platforms, RGB_list, RGB_coords, platforms_hor, platforms_ver, camera, all_sprites)
+        blawhi_player.update(left, right, up, platforms, RGB_list, RGB_coords, platforms_hor, platforms_ver, camera,
+                             all_sprites, platforms_cir)
         platforms_hor.update()
         platforms_ver.update()
+        platforms_cir.update()
 
         flagRGB.empty()
         for i in range(3):
@@ -138,12 +148,13 @@ def main():
     pygame.init()
     LEVELS = 2
     screen = pygame.display.set_mode(size)
-    platform_coords, RGB_coords, platform_hor_coords, platform_ver_coords, level_borders = levels_init(LEVELS)
+    platform_coords, RGB_coords, platform_hor_coords, \
+    platform_ver_coords, level_borders, platform_cir_coords = levels_init(LEVELS)
 
     for i in range(LEVELS):
         if not level(screen, platform_coords[i], RGB_coords[i],
-               platform_hor_coords[i], platform_ver_coords[i],
-               level_borders[i]):
+                     platform_hor_coords[i], platform_ver_coords[i],
+                     level_borders[i], platform_cir_coords[i]):
             break
         if not win_bild(screen, i):
             break
