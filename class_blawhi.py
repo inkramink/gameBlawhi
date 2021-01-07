@@ -51,7 +51,7 @@ class Blawhi(pygame.sprite.Sprite):
                     RGButtons[i] == 0:
                 RGButtons[i] = 1
         if all(RGButtons):
-            self.all_buttons_collected = True  # выигрыщ на уровне
+            self.all_buttons_collected = True  # выигрыш на уровне
 
         if left or right:  # смена кадра при ходьбе
             self.animation_counter += 1
@@ -89,7 +89,7 @@ class Blawhi(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(Blawhi.images[self.image_i], 1, 0)
 
         if left or right:  # сдвиг камеры
-            if camera.update(self):
+            if camera.update(self, left):
                 self.rect.x = size[0] // 2 - self.rect.w // 2
             for sprite in all_sprites:
                 if sprite != self:

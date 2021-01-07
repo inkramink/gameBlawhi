@@ -9,21 +9,37 @@ class Camera:
         self.borders = borders
         
     def apply(self, obj):
-        if self.pos_over_field in range(size[0] // 2, self.borders - size[0] // 2):
+        if self.pos_over_field in range(size[0] // 2 - 9, self.borders - size[0] // 2):
             if type(obj) != Buttons:  # у кнопок по другому rect задан
                 obj.rect.x += self.dx
             else:
                 obj.rect.left += self.dx
     
-    def update(self, target):
-        if target.rect.x in range(size[0] // 2, self.borders - size[0] // 2):
+    def update(self, target, left):
+        # возвращает маркер, что персонаж должен остаться на середине экрана
+        if self.pos_over_field in range(size[0] // 2 - target.rect.w // 2, self.borders - size[0] // 2 - target.rect.w // 2):
+            # блави находится посередине экрана и экран двигается
             new_dx = -(target.rect.x + target.rect.w // 2 - size[0] // 2)
             if self.pos_over_field == 0:
-                self.pos_over_field = self.dx - new_dx + size[0] // 2
+                self.pos_over_field = target.rect.x
             else:
-                self.pos_over_field += self.dx - new_dx
+                self.pos_over_field -= new_dx
             self.dx = new_dx
-            return True  # маркер, что изменения были произведены
-        self.dx = 0
-        return False
+            return True
+            
+        elif self.pos_over_field < size[0] // 2 - target.rect.w // 2:
+            # блави приближается к левой границе и экран не двигается
+            new_dx = -(target.rect.x + target.rect.w // 2 - size[0] // 2)
+            if self.pos_over_field < 0:
+                self.pos_over_field = 0
+            else:
+                self.pos_over_field = target.rect.x
+            self.dx = 0
+            return False
         
+        elif self.pos_over_field >= self.borders - size[0] // 2 - target.rect.w // 2:
+            # блави приближается к правой границе и экран не двигается
+            new_dx = -(target.rect.x + target.rect.w // 2 - size[0] // 2)
+            self.pos_over_field = self.borders - size[0] // 2 - new_dx - target.rect.w // 2
+            self.dx = 0
+            return False
