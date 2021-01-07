@@ -68,14 +68,14 @@ class PlatformKr(pygame.sprite.Sprite):
             self.rect.left += 1
             self.rect.top = self.orig[1] + sqrt(self.rad ** 2 - (self.rect.left - self.orig[0]) ** 2)
         if self.orig[0] < self.rect.left <= self.orig[0] + 100 and \
-                self.orig[1] >= self.rect.top > self.orig[1] - 100:
-            self.rect.top -= 1
-            self.rect.left = self.orig[1] + sqrt(self.rad ** 2 - (self.rect.top - self.orig[1]) ** 2)
+                self.orig[1] >= self.rect.top >= self.orig[1] - 100:
+            self.rect.left -= 1
+            self.rect.top = self.orig[1] - sqrt(self.rad ** 2 - (self.rect.left - self.orig[1]) ** 2)
         if self.orig[0] >= self.rect.left > self.orig[0] - 100 and \
                 self.orig[1] > self.rect.top >= self.orig[1] - 100:
             self.rect.left -= 1
             self.rect.top = self.orig[0] - sqrt(self.rad ** 2 - (self.rect.left - self.orig[1]) ** 2)
         if self.orig[0] > self.rect.left >= self.orig[0] - 100 and \
                 self.orig[1] <= self.rect.top < self.orig[1] + 100:
-            self.rect.top += 1
-            self.rect.left = self.orig[0] - sqrt(self.rad ** 2 - (self.rect.top - self.orig[1]) ** 2)
+            self.rect.left += 1
+            self.rect.top = self.orig[0] + sqrt(self.rad ** 2 - (self.rect.left - self.orig[1]) ** 2)\

@@ -64,7 +64,6 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
     for i in platform_ver_coords:
         PlatformVer(platforms_ver, location=i)
     for i in platform_cir_coords:
-        print(i)
         PlatformKr(platforms_cir, location=i)
 
     all_sprites.add(*platforms.sprites())
