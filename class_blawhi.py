@@ -1,6 +1,7 @@
 import pygame
 import os
 import sys
+from main import size
 
 JUMP_POWER = 12
 GRAVITY = 0.65
@@ -42,10 +43,10 @@ class Blawhi(pygame.sprite.Sprite):
         self.onGround = False  # Нахождение на земле
         self.all_buttons_collected = False
 
-    def update(self, left, right, up, platforms, RGB, RGB_coords, platforms_hor, platforms_ver):
+    def update(self, left, right, up, platforms, RGB, RGB_coords, platforms_hor, platforms_ver, camera, all_sprites):
         from class_buttonsForBlawhi import Buttons, RGButtons
         for i in range(3):
-            if pygame.sprite.collide_mask(self, Buttons(RGB, num=i, location=RGB_coords[i])) and \
+            if pygame.sprite.collide_mask(self, RGB[i]) and \
                     RGButtons[i] == 0:
                 RGButtons[i] = 1
         if all(RGButtons):
@@ -85,6 +86,13 @@ class Blawhi(pygame.sprite.Sprite):
             self.image = Blawhi.images[self.image_i]
         else:
             self.image = pygame.transform.flip(Blawhi.images[self.image_i], 1, 0)
+        
+        if left or right:  # сдвиг камеры
+            if camera.update(self):
+                self.rect.x = size[0] // 2 - self.rect.w // 2
+            for sprite in all_sprites:
+                if sprite != self:
+                    camera.apply(sprite)
 
     def collide(self, xvel, yvel, platforms, platforms_hor, platforms_ver):
         for i in platforms_ver:

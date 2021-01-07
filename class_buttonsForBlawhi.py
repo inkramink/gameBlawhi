@@ -32,6 +32,14 @@ class Buttons(pygame.sprite.Sprite):
     def __init__(self, *group, num=0, location=(0, 0)):
         super().__init__(*group)
         self.image = Buttons.images[num]
+        self.num = num
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.left, self.rect.top = location
+        self.group = group[0]
+    
+    def update(self, RGButtons, all_sprites):
+        if RGButtons[self.num]:
+            self.group.remove(self)
+            all_sprites.remove(self)
+
