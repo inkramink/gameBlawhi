@@ -28,6 +28,8 @@ class PlatformHor(pygame.sprite.Sprite):
             self.fl = 1
         if self.rect.left == self.orig + self.lenn:
             self.fl = -1
+        if not (self.orig <= self.rect.left <= self.orig + self.lenn):
+            self.fl *= -1
         self.rect.left += self.fl * 1
 
 

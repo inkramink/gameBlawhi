@@ -48,11 +48,11 @@ def start_end_screen(intro_text, button_text):
 
 
 def levels_init(LEVELS):
-    platform_hor_coords = [[(550, 500)], [(550, 500)]]
-    platform_ver_coords = [[(400, 500)], [(400, 500)]]
-    platform_cir_coords = [[(300, 300)], []]
+    platform_hor_coords = [[(450, 430)], []]
+    platform_ver_coords = [[(150, 300)], []]
+    platform_cir_coords = [[], []]
     platform_coords = [
-        [(50, 580), (150, 500), (280, 426), (440, 430), (330, 380), (160, 300)],
+        [(50, 560), (160, 500), (280, 430), (740, 430), (330, 380), (300, 200)],
         [(250, 540), (400, 470), (560, 360), (370, 300), (680, 390)]
     ]
     RGB_coords = [
@@ -145,7 +145,7 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
                              all_sprites, platforms_cir)
         platforms_hor.update()
         platforms_ver.update()
-        platforms_cir.update()
+        # platforms_cir.update()
 
         flagRGB.empty()
         for i in range(3):
