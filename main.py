@@ -5,6 +5,48 @@ import pygame
 size = 800, 600
 
 
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+
+def start_end_screen(intro_text, button_text):
+    FPS = 60
+    clock = pygame.time.Clock()
+    screen = pygame.display.set_mode(size)
+    from class_blawhi import load_image
+    fon = load_image('background.png')
+    screen.blit(fon, (0, 0))
+    font = pygame.font.SysFont('serif', 40)
+    text_coord = 100
+    for line in intro_text:
+        string_rendered = font.render(line, 1, (70, 70, 70))
+        intro_rect = string_rendered.get_rect()
+        intro_rect.top = text_coord
+        intro_rect.x = screen.get_width() / 2 - string_rendered.get_width() / 2
+        text_coord += 50
+        screen.blit(string_rendered, intro_rect)
+    start_btn = font.render(button_text, 1, (70, 70, 70))
+    start_rect = start_btn.get_rect()
+    start_rect.top = 500
+    start_rect.x = screen.get_width() / 2 - start_btn.get_width() / 2
+    screen.blit(start_btn, start_rect)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if start_rect.left <= event.pos[0] <= start_rect.right \
+                        and start_rect.top <= event.pos[1] <= start_rect.bottom:
+                    return
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+# def end_screen()
+
+
 def levels_init(LEVELS):
     platform_hor_coords = [[(550, 500)], [(550, 500)]]
     platform_ver_coords = [[(400, 500)], [(400, 500)]]
@@ -84,7 +126,7 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False
+                terminate()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 left = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
@@ -118,8 +160,6 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
         pygame.display.flip()
         clock.tick(FPS)
 
-    return True
-
 
 def win_bild(screen, i):
     text1 = 'Уровень ' + str(i + 1) + ' пройден'
@@ -132,15 +172,13 @@ def win_bild(screen, i):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False
+                terminate()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 running = False
 
         screen.blit(ft1_surf, [screen.get_width() / 2 - ft1_surf.get_width() / 2, 100])
         screen.blit(ft2_surf, [screen.get_width() / 2 - ft2_surf.get_width() / 2, 170])
         pygame.display.flip()
-
-    return True
 
 
 def main():
@@ -149,16 +187,17 @@ def main():
     screen = pygame.display.set_mode(size)
     platform_coords, RGB_coords, platform_hor_coords, \
     platform_ver_coords, level_borders, platform_cir_coords = levels_init(LEVELS)
-
-    for i in range(LEVELS):
-        if not level(screen, platform_coords[i], RGB_coords[i],
-                     platform_hor_coords[i], platform_ver_coords[i],
-                     level_borders[i], platform_cir_coords[i]):
-            break
-        if not win_bild(screen, i):
-            break
-
-    pygame.quit()
+    start_game_text = ['ДОБРО ПОЖАЛОВАТЬ В ИГРУ BLAWHI!',
+                       'Нажмите СТАРТ, чтобы начать']
+    while True:
+        start_end_screen(start_game_text, 'СТАРТ')
+        for i in range(LEVELS):
+            level(screen, platform_coords[i], RGB_coords[i],
+                  platform_hor_coords[i], platform_ver_coords[i],
+                  level_borders[i], platform_cir_coords[i])
+            win_bild(screen, i)
+        end_game_text = ['Поздравляем! Вы прошли игру!']
+        start_end_screen(end_game_text, 'ВЕРНУТЬСЯ')
 
 
 if __name__ == '__main__':
