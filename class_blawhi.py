@@ -88,12 +88,11 @@ class Blawhi(pygame.sprite.Sprite):
         else:
             self.image = pygame.transform.flip(Blawhi.images[self.image_i], 1, 0)
 
-        if left or right:  # сдвиг камеры
-            if camera.update(self, left):
-                self.rect.x = size[0] // 2 - self.rect.w // 2
-            for sprite in all_sprites:
-                if sprite != self:
-                    camera.apply(sprite)
+        if camera.update(self, left):  # сдвиг камеры
+            self.rect.x = size[0] // 2 - self.rect.w // 2
+        for sprite in all_sprites:
+            if sprite != self:
+                camera.apply(sprite)
 
     def collide(self, xvel, yvel, platforms, platforms_hor, platforms_ver, platforms_cir):
         for i in platforms_cir:
@@ -131,7 +130,7 @@ class Blawhi(pygame.sprite.Sprite):
             if pygame.sprite.collide_rect(self, i):
                 if xvel > 0:
                     self.rect.right = i.rect.left
-                if xvel < 0:
+                elif xvel < 0:
                     self.rect.left = i.rect.right
                 if yvel > 0:
                     self.rect.bottom = i.rect.top

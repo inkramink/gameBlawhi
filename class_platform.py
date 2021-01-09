@@ -1,6 +1,7 @@
 import pygame
 from math import sqrt
 from class_blawhi import load_image, Blawhi
+from main import size
 
 
 class Platform(pygame.sprite.Sprite):
@@ -23,7 +24,7 @@ class PlatformHor(pygame.sprite.Sprite):
         self.fl = 1
         self.rect.left, self.rect.top = location
 
-    def update(self, left, right, camera, all_sprites):
+    def update(self):
         if self.rect.left == self.orig:
             self.fl = 1
         if self.rect.left == self.orig + self.lenn:
@@ -31,12 +32,6 @@ class PlatformHor(pygame.sprite.Sprite):
         if not (self.orig <= self.rect.left <= self.orig + self.lenn):
             self.fl *= -1
         self.rect.left += self.fl * 1
-        # if left or right:  # сдвиг камеры
-        #     if camera.update(Blawhi, left):
-        #         Blawhi.rect.x = size[0] // 2 - Blawhi.rect.w // 2
-        #     for sprite in all_sprites:
-        #         if sprite != Blawhi:
-        #             camera.apply(sprite)
 
 
 class PlatformVer(pygame.sprite.Sprite):
