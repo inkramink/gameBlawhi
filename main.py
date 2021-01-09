@@ -143,7 +143,7 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
         screen.blit(background, (0, 0))
         blawhi_player.update(left, right, up, platforms, RGB_list, RGB_coords, platforms_hor, platforms_ver, camera,
                              all_sprites, platforms_cir)
-        platforms_hor.update()
+        platforms_hor.update(left, right, camera, all_sprites)
         platforms_ver.update()
         # platforms_cir.update()
 
