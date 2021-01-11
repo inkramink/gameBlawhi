@@ -1,6 +1,7 @@
 import pygame
 from math import sqrt
 from class_blawhi import load_image, Blawhi
+from main import size
 
 
 class Platform(pygame.sprite.Sprite):
