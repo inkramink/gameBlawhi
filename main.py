@@ -45,18 +45,20 @@ def start_end_screen(intro_text, button_text):
 
 
 def levels_init(LEVELS):
-    platform_hor_coords = [[], [(450, 430)]]
-    platform_ver_coords = [[], [(150, 300)]]
+    platform_hor_coords = [[], [(450, 430)], [(300, 200), (500, 200)], ]
+    platform_ver_coords = [[], [(150, 300)], [(400, 410), (950, 300)], ]
     platform_coords = [
         [(250, 540), (400, 470), (560, 360), (370, 300), (680, 390)],
-        [(50, 560), (160, 500), (280, 430), (740, 430), (330, 380), (300, 200)]
+        [(50, 560), (160, 500), (280, 430), (740, 430), (330, 380), (300, 200)],
+        [(250, 500), (1300, 410), (750, 300), (200, 300), (1100, 150)],
     ]
     RGB_coords = [
         [button(platform_coords[0], 2), button(platform_coords[0], 3), button(platform_coords[0], 4)],
         [button(platform_coords[1], 3), button(platform_coords[1], 4), button(platform_coords[1], 5)],
+        [button(platform_coords[2], 2), button(platform_coords[2], 3), button(platform_coords[2], 1)],
     ]
 
-    level_borders = [size[0] * 2, size[0] * 2]
+    level_borders = [size[0] * 2] * LEVELS
     botom_platforms = [[(i, 595) for i in range(0, level_borders[j], 60)] for j in range(LEVELS)]
     for i in range(len(platform_coords)):  # во всех уровнях пол выложен платформами
         for platform in botom_platforms[i]:
@@ -190,7 +192,7 @@ def win_bild(screen, i):
 
 def main():
     pygame.init()
-    LEVELS = 2
+    LEVELS = 3
     screen = pygame.display.set_mode(size)
     platform_coords, RGB_coords, platform_hor_coords, \
     platform_ver_coords, level_borders = levels_init(LEVELS)
