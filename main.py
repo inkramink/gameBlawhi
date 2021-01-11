@@ -44,20 +44,16 @@ def start_end_screen(intro_text, button_text):
         clock.tick(FPS)
 
 
-# def end_screen()
-
-
 def levels_init(LEVELS):
-    platform_hor_coords = [[(450, 430)], []]
-    platform_ver_coords = [[(150, 300)], []]
-    platform_cir_coords = [[], []]
+    platform_hor_coords = [[], [(450, 430)]]
+    platform_ver_coords = [[], [(150, 300)]]
     platform_coords = [
-        [(50, 560), (160, 500), (280, 430), (740, 430), (330, 380), (300, 200)],
-        [(250, 540), (400, 470), (560, 360), (370, 300), (680, 390)]
+        [(250, 540), (400, 470), (560, 360), (370, 300), (680, 390)],
+        [(50, 560), (160, 500), (280, 430), (740, 430), (330, 380), (300, 200)]
     ]
     RGB_coords = [
-        [button(platform_coords[0], 3), button(platform_coords[0], 4), button(platform_coords[0], 5)],
-        [button(platform_coords[1], 2), button(platform_coords[1], 3), button(platform_coords[1], 4)],
+        [button(platform_coords[0], 2), button(platform_coords[0], 3), button(platform_coords[0], 4)],
+        [button(platform_coords[1], 3), button(platform_coords[1], 4), button(platform_coords[1], 5)],
     ]
 
     level_borders = [size[0] * 2, size[0] * 2]
@@ -67,7 +63,7 @@ def levels_init(LEVELS):
             platform_coords[i].append(platform)
 
     return platform_coords[:LEVELS], RGB_coords[:LEVELS], platform_hor_coords, \
-           platform_ver_coords, level_borders, platform_cir_coords
+           platform_ver_coords, level_borders
 
 
 def button(platform_coords, platform):
@@ -76,7 +72,7 @@ def button(platform_coords, platform):
 
 
 def level(screen, platform_coords, RGB_coords, platform_hor_coords,
-          platform_ver_coords, level_borders, platform_cir_coords):
+          platform_ver_coords, level_borders):
     from class_blawhi import load_image
     bg_image = load_image('background.png')
     background = pygame.Surface(screen.get_size())
@@ -96,8 +92,7 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
     platforms = pygame.sprite.Group()
     platforms_hor = pygame.sprite.Group()
     platforms_ver = pygame.sprite.Group()
-    platforms_cir = pygame.sprite.Group()
-    from class_platform import Platform, PlatformHor, PlatformVer, PlatformKr
+    from class_platform import Platform, PlatformHor, PlatformVer
 
     for i in platform_coords:
         Platform(platforms, location=i)
@@ -105,13 +100,10 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
         PlatformHor(platforms_hor, location=i)
     for i in platform_ver_coords:
         PlatformVer(platforms_ver, location=i)
-    for i in platform_cir_coords:
-        PlatformKr(platforms_cir, location=i)
 
     all_sprites.add(*platforms.sprites())
     all_sprites.add(*platforms_hor.sprites())
     all_sprites.add(*platforms_ver.sprites())
-    all_sprites.add(*platforms_cir.sprites())
     all_sprites.add(*RGB.sprites())
 
     running = True
@@ -122,6 +114,9 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
 
     from class_camera import Camera
     camera = Camera(level_borders)
+    count = 0
+
+    from class_particle import Particle, particles
 
     while running:
         for event in pygame.event.get():
@@ -140,12 +135,22 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
             if event.type == pygame.KEYUP and event.key == pygame.K_UP:
                 up = False
 
+        copy = RGButtons[::]
+
         screen.blit(background, (0, 0))
         blawhi_player.update(left, right, up, platforms, RGB_list, RGB_coords, platforms_hor, platforms_ver, camera,
-                             all_sprites, platforms_cir)
-        platforms_hor.update(left, right, camera, all_sprites)
+                             all_sprites)
+
+        # if RGButtons != copy:
+        for i in range(3):
+            if RGButtons[i] != copy[i]:
+                what = i
+                Particle.create_particles((790, 20 * what - 10))
+        if sum(RGButtons) != 0:
+            particles.draw(screen)
+            particles.update()
+        platforms_hor.update()
         platforms_ver.update()
-        # platforms_cir.update()
 
         flagRGB.empty()
         for i in range(3):
@@ -156,7 +161,9 @@ def level(screen, platform_coords, RGB_coords, platform_hor_coords,
 
         all_sprites.draw(screen)
         if blawhi_player.all_buttons_collected:
-            running = False
+            count += 1
+            if count == 20:
+                running = False
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -186,7 +193,7 @@ def main():
     LEVELS = 2
     screen = pygame.display.set_mode(size)
     platform_coords, RGB_coords, platform_hor_coords, \
-    platform_ver_coords, level_borders, platform_cir_coords = levels_init(LEVELS)
+    platform_ver_coords, level_borders = levels_init(LEVELS)
     start_game_text = ['ДОБРО ПОЖАЛОВАТЬ В ИГРУ BLAWHI!',
                        'Нажмите СТАРТ, чтобы начать']
     while True:
@@ -194,7 +201,7 @@ def main():
         for i in range(LEVELS):
             level(screen, platform_coords[i], RGB_coords[i],
                   platform_hor_coords[i], platform_ver_coords[i],
-                  level_borders[i], platform_cir_coords[i])
+                  level_borders[i])
             win_bild(screen, i)
         end_game_text = ['Поздравляем! Вы прошли игру!']
         start_end_screen(end_game_text, 'ВЕРНУТЬСЯ')

@@ -44,11 +44,11 @@ class Blawhi(pygame.sprite.Sprite):
         self.all_buttons_collected = False
 
     def update(self, left, right, up, platforms, RGB, RGB_coords, platforms_hor,
-               platforms_ver, camera, all_sprites, platforms_cir):
+               platforms_ver, camera, all_sprites):
         from class_buttonsForBlawhi import Buttons, RGButtons
         for i in range(3):
             if pygame.sprite.collide_mask(self, RGB[i]) and \
-                    RGButtons[i] == 0:
+                    RGButtons[i] == 0:  # проверка на сбор кнопки
                 RGButtons[i] = 1
         if all(RGButtons):
             self.all_buttons_collected = True  # выигрыш на уровне
@@ -79,9 +79,9 @@ class Blawhi(pygame.sprite.Sprite):
 
         self.onGround = False
         self.rect.x += self.xvel
-        self.collide(self.xvel, 0, platforms, platforms_hor, platforms_ver, platforms_cir)
+        self.collide(self.xvel, 0, platforms, platforms_hor, platforms_ver)
         self.rect.y += self.yvel
-        self.collide(0, self.yvel, platforms, platforms_hor, platforms_ver, platforms_cir)
+        self.collide(0, self.yvel, platforms, platforms_hor, platforms_ver)
 
         if not (self.left):
             self.image = Blawhi.images[self.image_i]
@@ -95,23 +95,7 @@ class Blawhi(pygame.sprite.Sprite):
                 if sprite != self:
                     camera.apply(sprite)
 
-    def collide(self, xvel, yvel, platforms, platforms_hor, platforms_ver, platforms_cir):
-        for i in platforms_cir:
-            if pygame.sprite.collide_rect(self, i):
-                if xvel > 0:
-                    self.rect.right = i.rect.left
-                if xvel < 0:
-                    self.rect.left = i.rect.right
-                if yvel > 0:
-                    self.rect.bottom = i.rect.top - 2
-                    self.rect.right = i.rect.right
-                    self.onGround = True
-                    self.yvel = i.fl * 3  # надо, правда надо
-                    self.rect.y += self.yvel
-                    self.yvel = 0
-                if yvel < 0:
-                    self.rect.top = i.rect.bottom
-                    self.yvel = 0
+    def collide(self, xvel, yvel, platforms, platforms_hor, platforms_ver):
         for i in platforms_ver:
             if pygame.sprite.collide_rect(self, i):
                 if xvel > 0:
